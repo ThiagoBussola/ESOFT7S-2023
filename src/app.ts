@@ -25,7 +25,7 @@ class App {
         // já vai por padrão executar o método routes
         this.routes()
         // 32 - chamando o método database e garantindo que ele será executado sempre que a classe for instanciada
-        this.database()
+        // this.database()
 
     }
 
