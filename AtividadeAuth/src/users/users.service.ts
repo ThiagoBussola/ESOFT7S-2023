@@ -12,6 +12,10 @@ export class UsersService {
 
 
   async create(createUserDto: CreateUserDto) {
+    const emailExists = await this.checkEmailExists(createUserDto.email);
+    if (emailExists) {
+      throw new Error('Email already exists');
+    }
     createUserDto.password = await this.hashPassword(createUserDto.password);
     const createdUser = await this.userModel.create(createUserDto);
     return createdUser;
@@ -51,10 +55,15 @@ export class UsersService {
     return deletedUser;
   }
 
-  async hashPassword(password: string) {
+  private async hashPassword(password: string) {
     const saltRounds = 10;
     const myPlaintextPassword = password;
     const salt = await hash(myPlaintextPassword, saltRounds);
     return salt;
+  }
+
+  private async checkEmailExists(email: string) {
+    const existingUser = await this.userModel.findOne({ email });
+    return !!existingUser;
   }
 }
