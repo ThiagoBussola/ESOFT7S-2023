@@ -10,7 +10,6 @@ import { hash } from 'bcrypt';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-
   async create(createUserDto: CreateUserDto) {
     const emailExists = await this.checkEmailExists(createUserDto.email);
     if (emailExists) {
@@ -37,21 +36,25 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const updatedUser = this.userModel.findByIdAndUpdate(
-      id,
-      {
-        name: updateUserDto.name,
-        age: updateUserDto.age,
-        email: updateUserDto.email,
-      },
-      { new: true },
-    ).select('-password');
+    const updatedUser = this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          name: updateUserDto.name,
+          age: updateUserDto.age,
+          email: updateUserDto.email,
+        },
+        { new: true },
+      )
+      .select('-password');
 
     return updatedUser;
   }
 
   remove(id: string) {
-    const deletedUser = this.userModel.findByIdAndDelete(id).select('-password');
+    const deletedUser = this.userModel
+      .findByIdAndDelete(id)
+      .select('-password');
     return deletedUser;
   }
 
@@ -63,7 +66,7 @@ export class UsersService {
   }
 
   private async checkEmailExists(email: string) {
-    const existingUser = await this.userModel.findOne({ email });
-    return !!existingUser;
+    const existingUser = await this.userModel.exists({ email });
+    return existingUser;
   }
 }
