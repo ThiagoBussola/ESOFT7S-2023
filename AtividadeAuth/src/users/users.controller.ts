@@ -63,26 +63,7 @@ export class UsersController {
       );
     }
   }
-
-  @UseGuards(AuthGuard)
-  @Get(':email')
-  findByEmail(@Param('email') email: string) {
-    try {
-      return this.usersService.findByEmail(email);
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
-        },
-        HttpStatus.FORBIDDEN,
-        {
-          cause: error,
-        },
-      );
-    }
-  }
-
+  
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

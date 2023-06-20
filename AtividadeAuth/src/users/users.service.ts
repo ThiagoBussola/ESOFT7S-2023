@@ -16,8 +16,8 @@ export class UsersService {
       throw new Error('Email already exists');
     }
     createUserDto.password = await this.hashPassword(createUserDto.password);
-    const createdUser = await this.userModel.create(createUserDto);
-    return createdUser;
+    await this.userModel.create(createUserDto);
+    //return emailExists
   }
 
   findAll() {
